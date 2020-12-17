@@ -26,7 +26,7 @@ const checkForUser = async (req, res, next) => {
   }
 }
 
-router.get("/", restrict, (req, res) => {
+router.get("/users", restrict, (req, res) => {
   Users.find()
         .then(users => {
               res.json(users);
