@@ -13,7 +13,7 @@ module.exports = {
     seeds: { directory: './data/seeds' },
   },
 
-  production: {
+    production: {
     client: "pg",
     connection: pgConnection,
     pool: {

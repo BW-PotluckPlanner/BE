@@ -1,7 +1,7 @@
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-// const secrets = require('../../config/secrets.js');
 const dbConfig = require('../../data/dbConfig.js');
+const restrict = require("../../middleware/restricted-endpoint")
 
 const router = require('express').Router();
 
@@ -26,7 +26,13 @@ const checkForUser = async (req, res, next) => {
   }
 }
 
-
+router.get("/", restrict, (req, res) => {
+  Users.find()
+        .then(users => {
+              res.json(users);
+        })
+        .catch(err => res.send(err));
+});
 
 router.post('/register', checkForUser, async (req, res) => {
   
