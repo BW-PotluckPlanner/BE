@@ -14,7 +14,7 @@ const checkForUser = async (req, res, next) => {
       const user = await Users.findBy(username);
       if (user) { req.userExists = true; req.user = user }
       else { req.userExists = false; }
-      console.log("this is user: ", user)
+      
       next();
     }
     else {

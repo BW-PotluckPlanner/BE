@@ -38,5 +38,5 @@ exports.up = function (knex) {
     return knex.schema
         .dropTableIfExists('food')
         .dropTableIfExists('potluck_food')
-
+        
   };
