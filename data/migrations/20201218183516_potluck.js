@@ -15,7 +15,10 @@ exports.up = function(knex) {
         pl.string('date', 10)
           .notNullable();
         
-        pl.string('time', 5)
+        pl.string('time_start', 11)
+          .notNullable();
+
+          pl.string('time_end', 11)
           .notNullable();
         
         pl.string("description", 100)

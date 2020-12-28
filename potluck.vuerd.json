@@ -160,7 +160,7 @@
           "active": false,
           "left": 60.79999999999982,
           "top": 57.599999999999966,
-          "zIndex": 442,
+          "zIndex": 466,
           "widthName": 60,
           "widthComment": 60
         },
@@ -349,9 +349,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 435.20000009536767,
-          "top": 378.39999999999986,
-          "zIndex": 445,
+          "left": 843.2000000953677,
+          "top": 555.2,
+          "zIndex": 498,
           "widthName": 60,
           "widthComment": 60
         },
@@ -385,7 +385,7 @@
             "id": "75e44ece-14a3-533a-5dd3-09b0beee8916"
           },
           {
-            "name": "food_id",
+            "name": "potluck_id",
             "comment": "",
             "dataType": "INTEGER",
             "default": "",
@@ -398,19 +398,19 @@
             "ui": {
               "active": false,
               "pk": false,
-              "fk": false,
+              "fk": true,
               "pfk": false,
               "widthName": 60,
               "widthComment": 60,
               "widthDataType": 60,
               "widthDefault": 60
             },
-            "id": "66296ed7-2f9e-1592-e545-a5b99d64287a"
+            "id": "4debefdc-25ee-92b9-f42b-8afde6118227"
           },
           {
-            "name": "potluck_id",
+            "name": "food_id",
             "comment": "",
-            "dataType": "",
+            "dataType": "INTEGER",
             "default": "",
             "option": {
               "autoIncrement": false,
@@ -421,21 +421,21 @@
             "ui": {
               "active": false,
               "pk": false,
-              "fk": false,
+              "fk": true,
               "pfk": false,
               "widthName": 60,
               "widthComment": 60,
               "widthDataType": 60,
               "widthDefault": 60
             },
-            "id": "c0ccdd30-8a81-7cca-608f-181b3d0f666c"
+            "id": "da9a5cd1-d3d8-81ee-3edb-b40e62946173"
           }
         ],
         "ui": {
-          "active": false,
-          "left": 55.99999923706121,
-          "top": 238.40000000000103,
-          "zIndex": 458,
+          "active": true,
+          "left": 63.1999992370612,
+          "top": 332.0000000000012,
+          "zIndex": 502,
           "widthName": 76,
           "widthComment": 60
         },
@@ -494,9 +494,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 433.59999961852975,
-          "top": 257.59999980926546,
-          "zIndex": 441,
+          "left": 872.7999996185297,
+          "top": 316.79999980926544,
+          "zIndex": 492,
           "widthName": 60,
           "widthComment": 60
         },
@@ -647,9 +647,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 435.200000190735,
-          "top": 58.399999809264926,
-          "zIndex": 443,
+          "left": 783.2000001907347,
+          "top": 69.59999980926492,
+          "zIndex": 493,
           "widthName": 60,
           "widthComment": 60
         },
@@ -659,29 +659,6 @@
         "name": "potluck_code",
         "comment": "",
         "columns": [
-          {
-            "name": "potluck_id",
-            "comment": "",
-            "dataType": "INTEGER",
-            "default": "",
-            "option": {
-              "autoIncrement": false,
-              "primaryKey": true,
-              "unique": false,
-              "notNull": true
-            },
-            "ui": {
-              "active": false,
-              "pk": true,
-              "fk": false,
-              "pfk": false,
-              "widthName": 60,
-              "widthComment": 60,
-              "widthDataType": 60,
-              "widthDefault": 60
-            },
-            "id": "8fe19b15-a490-8226-cde1-64f8a02fc108"
-          },
           {
             "name": "code",
             "comment": "",
@@ -737,7 +714,7 @@
               "autoIncrement": false,
               "primaryKey": false,
               "unique": false,
-              "notNull": false
+              "notNull": true
             },
             "ui": {
               "active": false,
@@ -760,7 +737,7 @@
               "autoIncrement": false,
               "primaryKey": false,
               "unique": false,
-              "notNull": false
+              "notNull": true
             },
             "ui": {
               "active": false,
@@ -773,13 +750,36 @@
               "widthDefault": 60
             },
             "id": "945d388f-2343-df8d-7f8f-b04c1fe2e425"
+          },
+          {
+            "name": "potluck_id",
+            "comment": "",
+            "dataType": "INTEGER",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": true,
+              "pfk": false,
+              "widthName": 60,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            },
+            "id": "6a6b6209-766b-a21f-dba8-e676fa222cf4"
           }
         ],
         "ui": {
-          "active": true,
-          "left": 57.600000190735265,
-          "top": 381.5999998092651,
-          "zIndex": 459,
+          "active": false,
+          "left": 432.00000019073497,
+          "top": 207.9999998092654,
+          "zIndex": 497,
           "widthName": 79,
           "widthComment": 60
         },
@@ -792,6 +792,76 @@
     "memos": []
   },
   "relationship": {
-    "relationships": []
+    "relationships": [
+      {
+        "identification": false,
+        "start": {
+          "tableId": "7dcf5845-f7e6-644e-7031-c0dbafd41fee",
+          "columnIds": [
+            "f7712bcd-720b-9800-1551-3f52f26005cc"
+          ],
+          "x": 236.7999999999998,
+          "y": 229.09999999999997,
+          "direction": "bottom"
+        },
+        "end": {
+          "tableId": "719871b3-6d5c-76ee-2a65-d4eb4eab8299",
+          "columnIds": [
+            "4debefdc-25ee-92b9-f42b-8afde6118227"
+          ],
+          "x": 236.6999992370612,
+          "y": 332.0000000000012,
+          "direction": "top"
+        },
+        "id": "2238c591-e373-8e26-7f23-2b1152059e13",
+        "relationshipType": "OneN"
+      },
+      {
+        "identification": false,
+        "start": {
+          "tableId": "7dcf5845-f7e6-644e-7031-c0dbafd41fee",
+          "columnIds": [
+            "f7712bcd-720b-9800-1551-3f52f26005cc"
+          ],
+          "x": 412.79999999999984,
+          "y": 143.34999999999997,
+          "direction": "right"
+        },
+        "end": {
+          "tableId": "409f274c-983e-2b41-b824-214f7b2af65f",
+          "columnIds": [
+            "6a6b6209-766b-a21f-dba8-e676fa222cf4"
+          ],
+          "x": 432.00000019073497,
+          "y": 293.74999980926543,
+          "direction": "left"
+        },
+        "id": "01f231dd-727a-199e-ce32-c1f4632f88eb",
+        "relationshipType": "OneN"
+      },
+      {
+        "identification": false,
+        "start": {
+          "tableId": "d8099e26-55fc-7eb6-1d44-b424095be64a",
+          "columnIds": [
+            "dd08f532-5fb6-a9e7-a73b-796e45493541"
+          ],
+          "x": 843.2000000953677,
+          "y": 630.7,
+          "direction": "left"
+        },
+        "end": {
+          "tableId": "719871b3-6d5c-76ee-2a65-d4eb4eab8299",
+          "columnIds": [
+            "da9a5cd1-d3d8-81ee-3edb-b40e62946173"
+          ],
+          "x": 410.1999992370612,
+          "y": 397.2500000000012,
+          "direction": "right"
+        },
+        "id": "6261493f-eaf5-d4b6-31ae-e991ca2b00c9",
+        "relationshipType": "OneN"
+      }
+    ]
   }
 }

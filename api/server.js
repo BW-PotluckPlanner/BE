@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const restrict = require('../middleware/restricted-endpoint');
 
 const authRouter = require('./auth/auth-router');
+const potluckRouter = require('./potluck/potluck-router');
 
 const server = express();
 
@@ -13,6 +14,7 @@ server.use(cors());
 server.use(express.json())
 
 server.use('/api/auth', authRouter)
+server.use('/api/potluck', potluckRouter)
 
 server.get("/", (req, res) => {
     res.json({ api: "api is running!"})

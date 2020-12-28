@@ -10,7 +10,6 @@ exports.up = function (knex) {
       .notNullable();  
 
     users.string('email', 128)
-      .unique()
       .notNullable();
 
     users.string('first_name', 50)

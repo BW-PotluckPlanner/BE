@@ -39,14 +39,14 @@ router.post('/register', checkForUser, async (req, res) => {
   if (req.userExists) {
     res.status(400).json({ message: "username taken" })
   } else {
-    let {username, password } = req.body;
+    let { username, password, email, first_name, last_name } = req.body;
       if (!username && !password ) {
         res.status(401).json({ error: "username and password required"});
       } else {
         try {
           const rounds = process.env.BCRYPT_ROUNDS;
           const hash = bcryptjs.hashSync(password, rounds)
-          const saved = { username, password: hash }
+          const saved = { username, password: hash, email, first_name, last_name }
           const addUser = await Users.add(saved)
           const name = await Users.findBy(username)
           const token = jwt.sign({ username }, process.env.JWT_SECRET, {expiresIn: '1d'})

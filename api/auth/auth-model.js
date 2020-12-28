@@ -9,7 +9,7 @@ module.exports = {
 async function find() {
 
   try {
-    return await db("users").select("id", "username", "password").orderBy("id");
+    return await db("users").select("id", "username", "email", "first_name", "last_name").orderBy("id");
   } catch (error) {
     throw error;
   }
