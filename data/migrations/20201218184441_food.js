@@ -4,12 +4,7 @@ exports.up = function (knex) {
 
         food.string('name', 50)
         .notNullable()
-        .unique();
-  
-        food.string('category', 128);
-  
-        food.string('comment', 128);
-  
+        .unique(); 
     })
     .createTable('potluck_food', plf => {
 

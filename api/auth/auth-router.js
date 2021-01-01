@@ -1,11 +1,14 @@
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dbConfig = require('../../data/dbConfig.js');
-const restrict = require("../../middleware/restricted-endpoint")
 
 const router = require('express').Router();
 
 const Users = require('../auth/auth-model')
+
+const {
+  restrict
+} = require("../../middleware/middleware")
 
 const checkForUser = async (req, res, next) => {
   try {
