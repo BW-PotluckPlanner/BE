@@ -3,6 +3,7 @@ const db = require('../../data/dbConfig.js')
 module.exports = {
     find,
     findById,
+    getUserRole,
     addPotluck,
     addUsertoPotluck,
     update,
@@ -19,22 +20,34 @@ async function find() {
 
 async function findById(id) {
     try {
-      const potluckId = await db('potluck').where({ id: id }).select('*').first();
+      const potluckId = await db('potluck').where({ id }).select('*').first();
       return potluckId;
     } catch (err) {
         throw err
     }
 }
 
-async function addPotluck(potluck) {
+//gets user role
+async function getUserRole(potluck_id, user_id) {
     try {
-        const newPotluck =  await db('potluck').insert(potluck, "id")
+        const userRole =  await db("potluck_members").where({ potluck_id, user_id }).select("role_id").first();
+        return userRole
+    } catch (err) {
+        throw err
+    }
+}
+
+//creates potluck
+async function addPotluck(data) {
+    try {
+        const newPotluck =  await db('potluck').insert(data, "id")
         return newPotluck;
     } catch (err) {
         throw err;
     }
 }
 
+//adds user to potluck_members
 async function addUsertoPotluck(member) {
     try {
         return db("potluck_members").insert(member)

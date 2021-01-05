@@ -1,7 +1,7 @@
 const express = require('express');
-
+const crypto = require('crypto')
 const Potluck = require('./potluck-model.js')
-
+const Invite = require('../invites/invite-model.js')
 const {
     restrict,
     validatePotluckId
@@ -36,24 +36,48 @@ router.get('/:id', validatePotluckId, restrict, (req, res) => {
         })
 })
 
-//create and add members to potluck
+//create and add creator to potluck
 router.post('/', restrict, (req, res) => {
-    const { body } = req;
+    const { name, date, time_start, time_end, description } = req.body;
+    const potluckData = { name, date, time_start, time_end, description }
+    const uid = req.body.userId
 
-    Potluck.addPotluck(body)
+    Potluck.addPotluck(potluckData)
         .then(potluck => {
             Potluck.addUsertoPotluck({
-                potluck_id: potluck[0].id,
-                user_id: req.user.id,
+                potluck_id: potluck[0],
+                user_id: uid,
                 role_id: 1,
             }).then(() => {
-                res.status(201).json({id: potluck[0], name: potluck.name});
+                res.status(201).json({id: potluck[0], name: potluckData.name});
             })
             
         })
         .catch(err => {
             res.status(500).json({ message: `Failed to create potluck: ${err}`})
         })
+})
+
+//add user to potluck
+
+router.post("/:id/users", (req, res) => {
+    const { id } = req.params;
+    const potluckData = { potluck_id: id }
+    const uid = req.body.userId
+
+    if(potluckData.potluck_id && uid) {
+        Potluck.addUsertoPotluck({
+            potluck_id: id,
+            user_id: uid,
+            role_id: 2
+        }).then(() => {
+            res.status(201).json({ message: `user: ${uid}, added to potluck: ${id}`})
+        }).catch(err => {
+            res.status(500).json({ message: `Failed to add user to potluck: ${err}`})
+        })
+    } else {
+        res.status(400).json({ message: "must contain required fields" });
+      }
 })
 
 //update potluck
@@ -82,6 +106,52 @@ router.delete('/:id', (req, res) => {
             res.status(500).json(err)
         })
 })
+
+//creates invite code
+router.post("/:id/invite/:userId", async (req, res) => {
+    const potluck_id = req.params.id;
+    const user_id = req.params.userId;
+
+    const role = await Potluck.getUserRole(potluck_id, user_id)
+    
+    if (role.role_id !== 1) {
+        res.status(403).json({ error: "Invite access denied."})
+    } else {
+        if(!potluck_id || !user_id) {
+            res.status(400).json({ message: "must contain potluck id, and user id."})
+        }
+
+        const newCode = genCode(potluck_id);
+        const codeData = { potluck_id, newCode};
+        
+
+
+    Invite.findByPotluck(potluck_id)
+        .then((invite) => {
+            if (invite.isValid == true) {
+                    res.status(400).json({ Code_Exists: invite.code})
+            } else {
+                res.status(200).json(...invite)
+            }
+        })
+
+        .catch(() => {
+            Invite.insert(codeData)
+                .then((data) => {
+                    res.status(200).json({ ...data })
+                })
+                .catch((err) => {
+                    res.status(400).json({ message: `potluck with the id ${potluck_id} does not exist`, error: err})
+                })
+            })
+    }
+})
+
+//generates invite code
+function genCode(potluck_id) {
+    var newCode = crypto.randomBytes(12).toString('hex')
+    return `${potluck_id}-${newCode}`;
+}
 
 
 

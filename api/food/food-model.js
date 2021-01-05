@@ -4,6 +4,8 @@ module.exports = {
     find,
     findByName,
     add,
+    addFoodtoPotluck,
+    update,
     remove
 }
 
@@ -33,6 +35,28 @@ async function add(food) {
   }  
 }
 
-async function remove(food) {
-    
+//add food to potluck
+async function addFoodtoPotluck(food) {
+    try {
+      return db("potluck_food").insert(food)  
+    } catch (err) {
+        throw err
+    }
+}
+
+async function update(id, changes) {
+    try {
+        const updatedFood = await db('potluck').where({ id }).update(changes);
+        return updatedFood;
+    } catch (err) {
+        throw err
+    }
+}
+
+async function remove(id) {
+    try {
+        return await db('food').where({ id }).del()
+    } catch (err) {
+        throw err
+    }
 }

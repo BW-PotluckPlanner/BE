@@ -1,9 +1,11 @@
 const express = require('express');
+const dbConfig = require('../../data/dbConfig.js');
 
 const Food = require('./food-model.js')
 
 const router = express.Router()
 
+//get all food
 router.get('/', (req, res) => {
     Food.find()
         .then(food => {
@@ -14,6 +16,7 @@ router.get('/', (req, res) => {
         })
 })
 
+//get food by name
 router.get('/:name', (req, res) => {
     const { name } = req.params
 
@@ -30,17 +33,26 @@ router.get('/:name', (req, res) => {
         })
 })
 
+//add new food
 router.post('/', (req, res) => {
-    const newFood = req.body
+    const { name } = req.body
+    const newFood = { name }
+    const pid = req.body.pId
 
     Food.add(newFood)
         .then(food => {
-            res.status(201).json({ message: "Your item as been added."});
+            Food.addFoodtoPotluck({
+                food_id: food[0],
+                potluck_id: pid
+            }).then(() => {
+                res.status(201).json({ id: food[0], name: newFood.name, potluck_id: pid });
+            })
         })
         .catch(err => {
-            res.status(500).json({ message: `Failed to add your item. Check to see if it already exists`})
+            res.status(500).json({ message: `Failed to add your item. Check to see if it already exists: ${err}`})
         })
 })
 
 
-module.exports = router;
+
+module.exports = router; 
