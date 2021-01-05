@@ -47,6 +47,8 @@ router.post('/', (req, res) => {
             }).then(() => {
                 res.status(201).json({ id: food[0], name: newFood.name, potluck_id: pid });
             })
+        }).catch(err => {
+            res.status(500).json({ message: `Could not add food to potluck, check potluck id`})
         })
         .catch(err => {
             res.status(500).json({ message: `Failed to add your item. Check to see if it already exists: ${err}`})
