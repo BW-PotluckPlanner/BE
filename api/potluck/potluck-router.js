@@ -160,7 +160,7 @@ router.delete('/:id', (req, res) => {
 })
 
 //creates invite code
-router.post("/:id/invite/:userId", restrict, validatePotluckOwner, async (req, res) => {
+router.post("/:id/invite/:userId", restrict, async (req, res) => {
     const potluck_id = req.params.id;
     const user_id = req.params.userId;
 
