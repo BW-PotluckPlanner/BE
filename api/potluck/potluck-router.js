@@ -133,7 +133,7 @@ router.post("/:id/users", (req, res) => {
 })
 
 //update potluck
-router.put('/:id', validatePotluckId, validatePotluckOwner, (req, res) => {
+router.put('/:id', validatePotluckId, (req, res) => {
     const changes = req.body
     const { id } = req.params  
     
