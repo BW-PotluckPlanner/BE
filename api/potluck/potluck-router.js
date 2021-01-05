@@ -5,7 +5,8 @@ const Invite = require('../invites/invite-model.js')
 const {
     restrict,
     validatePotluckId
-} = require('../../middleware/middleware.js')
+} = require('../../middleware/middleware.js');
+const { Console } = require('console');
 
 const router = express.Router()
 
@@ -36,6 +37,37 @@ router.get('/:id', validatePotluckId, restrict, (req, res) => {
         })
 })
 
+//fetch potlucks user has created
+router.get('/:userId/mypotlucks', restrict, (req, res) => {
+    const { userId } = req.params;
+    Potluck.findByUserId(userId)
+        .then((potluck) => {
+            res.status(200).json(potluck)
+        })
+        .catch((err) => {
+            res.status(500).json({ message: `Could not retrieve potlucks created with user id: ${userId}`})
+        })
+})
+
+//fetch single potluck created by user
+router.get('/:userId/mypotlucks/:id', restrict, (req, res) => {
+    const { userId } = req.params;
+    const { id } = req.params
+
+    Potluck.findByUserId(userId)
+        .then((potluck) => {
+            Potluck.findById(id)
+            .then((singlePotluck) => {
+                res.status(200).json(singlePotluck)
+            })
+            .catch((err) => {
+                res.status(500).json({ message: "could not find potlucks for that user"})
+            })
+        }).catch((err) => {
+            res.status(500).json({ message: "no potlucks for that user."})
+        })
+
+})
 //create and add creator to potluck
 router.post('/', restrict, (req, res) => {
     const { name, date, time_start, time_end, description } = req.body;

@@ -3,6 +3,7 @@ const db = require('../../data/dbConfig.js')
 module.exports = {
     find,
     findById,
+    findByUserId,
     getUserRole,
     addPotluck,
     addUsertoPotluck,
@@ -24,6 +25,18 @@ async function findById(id) {
       return potluckId;
     } catch (err) {
         throw err
+    }
+}
+
+async function findByUserId(userId) {
+    try {
+        return await db('users')
+        .join('potluck_members', 'potluck_members.user_id', 'users.id')
+        .join('potluck', 'potluck_members.potluck_id', 'potluck.id')
+        .where('users.id', userId)
+        .select('potluck.id', 'potluck.name', 'potluck.date', 'potluck.time_start', 'potluck.time_end')
+    } catch (err) {
+        throw err;
     }
 }
 
