@@ -5,6 +5,7 @@ module.exports = {
     findById,
     findByUserId,
     getUserRole,
+    getAdminRole,
     addPotluck,
     addUsertoPotluck,
     update,
@@ -34,7 +35,7 @@ async function findByUserId(userId) {
         .join('potluck_members', 'potluck_members.user_id', 'users.id')
         .join('potluck', 'potluck_members.potluck_id', 'potluck.id')
         .where('users.id', userId)
-        .select('potluck.id', 'potluck.name', 'potluck.date', 'potluck.time_start', 'potluck.time_end')
+        .select('potluck.id', 'potluck.name', 'potluck.date', 'potluck.time_start', 'potluck.time_end', 'potluck_members.role_id')
     } catch (err) {
         throw err;
     }
@@ -44,6 +45,15 @@ async function findByUserId(userId) {
 async function getUserRole(potluck_id, user_id) {
     try {
         const userRole =  await db("potluck_members").where({ potluck_id, user_id }).select("role_id").first();
+        return userRole
+    } catch (err) {
+        throw err
+    }
+}
+
+async function getAdminRole(user_id) {
+    try {
+        const userRole =  await db("potluck_members").where({user_id}).select("potluck_id", "role_id");
         return userRole
     } catch (err) {
         throw err

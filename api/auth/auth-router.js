@@ -74,7 +74,7 @@ router.post('/register', checkForUser, async (req, res) => {
         if (username && password) {
           if (bcryptjs.compareSync(password, req.user.password)) {
             const token = jwt.sign({ username: user.username}, process.env.JWT_SECRET, { expiresIn: '1d'})
-            res.status(200).json({ message: `welcome, ${req.user.username}`, token })
+            res.status(200).json({ message: `welcome, ${req.user.username}`, token, userId: req.user.id })
           } else {
             res.status(401).json({ message: "invalid credentials" })
           }

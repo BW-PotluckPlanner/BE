@@ -2,10 +2,15 @@ const express = require('express');
 const crypto = require('crypto')
 const Potluck = require('./potluck-model.js')
 const Invite = require('../invites/invite-model.js')
+
+
 const {
     restrict,
-    validatePotluckId
+    validatePotluckId,
+    validatePotluckOwner
 } = require('../../middleware/middleware.js');
+
+
 const { Console } = require('console');
 
 const router = express.Router()
@@ -37,7 +42,7 @@ router.get('/:id', validatePotluckId, restrict, (req, res) => {
         })
 })
 
-//fetch potlucks user has created
+//fetch potlucks user is apart of
 router.get('/:userId/mypotlucks', restrict, (req, res) => {
     const { userId } = req.params;
     Potluck.findByUserId(userId)
@@ -49,7 +54,20 @@ router.get('/:userId/mypotlucks', restrict, (req, res) => {
         })
 })
 
-//fetch single potluck created by user
+//fetch potlucks user created
+router.get('/:userId/admin', restrict, (req, res) => {
+    const { userId } = req.params;
+    Potluck.getAdminRole(userId)
+        .then((potluck) => {
+            
+            res.status(200).json(potluck)
+        })
+        .catch((err) => {
+            res.status(500).json({ message: `Could not retrieve potlucks created with user id: ${userId}`})
+        })
+})
+
+//fetch single potluck user is apart of
 router.get('/:userId/mypotlucks/:id', restrict, (req, res) => {
     const { userId } = req.params;
     const { id } = req.params
@@ -68,6 +86,8 @@ router.get('/:userId/mypotlucks/:id', restrict, (req, res) => {
         })
 
 })
+
+
 //create and add creator to potluck
 router.post('/', restrict, (req, res) => {
     const { name, date, time_start, time_end, description } = req.body;
@@ -113,7 +133,7 @@ router.post("/:id/users", (req, res) => {
 })
 
 //update potluck
-router.put('/:id', validatePotluckId, (req, res) => {
+router.put('/:id', validatePotluckId, validatePotluckOwner, (req, res) => {
     const changes = req.body
     const { id } = req.params  
     
@@ -140,7 +160,7 @@ router.delete('/:id', (req, res) => {
 })
 
 //creates invite code
-router.post("/:id/invite/:userId", async (req, res) => {
+router.post("/:id/invite/:userId", restrict, validatePotluckOwner, async (req, res) => {
     const potluck_id = req.params.id;
     const user_id = req.params.userId;
 
