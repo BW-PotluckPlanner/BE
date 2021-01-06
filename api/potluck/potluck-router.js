@@ -39,7 +39,7 @@ router.get('/:id', validatePotluckId, restrict, (req, res) => {
         })
 })
 
-router.get('/:id/attendees', restrict, validatePotluckId, restrict, (req, res) => {
+router.get('/:id/attendees', restrict, validatePotluckId, (req, res) => {
     const { id } = req.params;
     Potluck.findUsersAtPotluck(id)
         .then((members) => {
@@ -108,7 +108,7 @@ router.get('/:userId/mypotlucks/:id', restrict, (req, res) => {
 
 })
 
-//fetch single potluck user is apart of
+//fetch single potluck user created
 router.get('/:userId/admin/:id', restrict, (req, res) => {
     const { userId } = req.params;
     const { id } = req.params

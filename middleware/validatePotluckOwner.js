@@ -9,7 +9,6 @@ module.exports = function validatePotluckOwner(req, res, next) {
     if (user.role_id !== 1) {
         res.status(404).json({ message: "Admin only" });
     } else {
-        user.role_id = 1;
         next();
     }
 })

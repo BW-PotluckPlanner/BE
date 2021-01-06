@@ -9,6 +9,7 @@ module.exports = {
     findUsersAtPotluck,
     getUserRole,
     getFood,
+    getAdminRole,
     addPotluck,
     addUsertoPotluck,
     update,
@@ -40,7 +41,7 @@ async function findByUserId(userId) {
         .join('potluck_members', 'potluck_members.user_id', 'users.id')
         .join('potluck', 'potluck_members.potluck_id', 'potluck.id')
         .where('users.id', userId)
-        .select('potluck.id', 'potluck.name', 'potluck.date', 'potluck.time_start', 'potluck.time_end', 'potluck_members.role_id')
+        .select('potluck.id', 'potluck.name', 'potluck.description', 'potluck.date', 'potluck.time_start', 'potluck.time_end', 'potluck_members.role_id')
     } catch (err) {
         throw err;
     }
@@ -53,7 +54,7 @@ async function findByAdmin(userId) {
         .join('potluck', 'potluck_members.potluck_id', 'potluck.id')
         .where('users.id', userId)
         .andWhere('potluck_members.role_id', 1)
-        .select('potluck.id', 'potluck.name', 'potluck.date', 'potluck.time_start', 'potluck.time_end')
+        .select('potluck.id', 'potluck.name', 'potluck.date', 'potluck.description', 'potluck.time_start', 'potluck.time_end')
     } catch (err) {
         throw err;
     }
@@ -67,13 +68,13 @@ async function findSingleByAdmin(userId, id) {
         .where('users.id', userId)
         .andWhere('potluck.id', id)
         .andWhere('potluck_members.role_id', 1)
-        .select('potluck.id', 'potluck.name', 'potluck.date', 'potluck.time_start', 'potluck.time_end')
+        .select('potluck.id', 'potluck.name', 'potluck.date', 'potluck.description', 'potluck.time_start', 'potluck.time_end')
     } catch (err) {
         throw err;
     }
 }
 
-//gets user role
+//gets user role for specific potluck
 async function getUserRole(potluck_id, user_id) {
     try {
         const userRole =  await db("potluck_members").where({ potluck_id, user_id }).select("role_id").first();
@@ -83,6 +84,15 @@ async function getUserRole(potluck_id, user_id) {
     }
 }
 
+//gets user role
+async function getAdminRole(user_id) {
+    try {
+        const userRole =  await db("potluck_members").where({ potluck_id, user_id }).select("role_id").first();
+        return userRole
+    } catch (err) {
+        throw err
+    }
+}
 //gets users attending a potluck
 async function findUsersAtPotluck(id) {
     try {
@@ -90,7 +100,7 @@ async function findUsersAtPotluck(id) {
             .join('potluck_members', 'potluck_members.potluck_id', 'potluck.id')
             .join('users', 'potluck_members.user_id', 'users.id')
             .where('potluck.id', id)
-            .select('users.username', 'potluck_members.role_id')
+            .select('users.username', 'users.first_name', 'users.last_name', 'potluck_members.role_id')
     } catch (err) {
         throw err
     }
