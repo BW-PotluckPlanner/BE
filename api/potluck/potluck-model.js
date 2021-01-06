@@ -8,6 +8,7 @@ module.exports = {
     findSingleByAdmin,
     findUsersAtPotluck,
     getUserRole,
+    getFood,
     addPotluck,
     addUsertoPotluck,
     update,
@@ -25,8 +26,9 @@ async function find() {
 async function findById(id) {
     try {
       const potluckId = await db('potluck').where({ id }).select('*').first();
-      const usersAttending = await findUsersAtPotluck(id)
-      return {...potluckId, usersAttending}
+      const attending = await findUsersAtPotluck(id)
+      const food = await getFood(id)
+      return {...potluckId, attending, food}
     } catch (err) {
         throw err
     }
@@ -89,6 +91,19 @@ async function findUsersAtPotluck(id) {
             .join('users', 'potluck_members.user_id', 'users.id')
             .where('potluck.id', id)
             .select('users.username', 'potluck_members.role_id')
+    } catch (err) {
+        throw err
+    }
+}
+
+//gets food wanted from potluck
+async function getFood(id) {
+    try {
+        return await db('potluck')
+            .join('potluck_food', 'potluck_food.potluck_id', 'potluck.id')
+            .join('food', 'potluck_food.food_id', 'food.id')
+            .where('potluck.id', id)
+            .select('food.name')
     } catch (err) {
         throw err
     }

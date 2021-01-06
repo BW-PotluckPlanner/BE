@@ -55,6 +55,27 @@ router.post('/', (req, res) => {
         })
 })
 
+router.put('/:id', (req, res) => {
+    const { id } = req.params
+    const changes = req.body
+    Food.update(id, changes)
+        .then(updated => {
+            res.status(200).json({ message: `item ${id} updated. ${updated}`})
+        }).catch(err => {
+            res.status(500).json({ message: `Failed to update food: ${err}`})
+        })
+})
+
+router.delete('/:id', (req, res) => {
+    const { id } = req.params
+    Food.remove(id)
+        .then(del => {
+            res.status(200).json({message: `successfully deleted food item ${id}`})
+        }).catch(err => {
+            res.status(500).json(err)
+        })
+})
+
 
 
 module.exports = router; 

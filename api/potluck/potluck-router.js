@@ -62,6 +62,18 @@ router.get('/:userId/mypotlucks', restrict, (req, res) => {
         })
 })
 
+//fetch food from potluck
+router.get('/:id/food', restrict, (req, res) => {
+    const { id } = req.params;
+    Potluck.getFood(id)
+        .then((food) => {
+            res.status(200).json(food)
+        })
+        .catch((err) => {
+            res.status(500).json({ message: `Could not retrieve food from potluck`})
+        })
+})
+
 //fetch potlucks user created
 router.get('/:userId/admin', restrict, (req, res) => {
     const { userId } = req.params;

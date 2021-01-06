@@ -46,7 +46,7 @@ async function addFoodtoPotluck(food) {
 
 async function update(id, changes) {
     try {
-        const updatedFood = await db('potluck').where({ id }).update(changes);
+        const updatedFood = await db('food').where({ id }).update(changes);
         return updatedFood;
     } catch (err) {
         throw err
