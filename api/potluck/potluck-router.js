@@ -14,7 +14,6 @@ const {
 const router = express.Router()
 
 
-
 //fetch all potlucks
 router.get('/', restrict, (req, res) => {
     Potluck.find()

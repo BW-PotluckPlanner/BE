@@ -24,7 +24,8 @@ async function find() {
 async function findById(id) {
     try {
       const potluckId = await db('potluck').where({ id }).select('*').first();
-      return potluckId;
+      const usersAttending = await findUsersAtPotluck(id)
+      return {...potluckId, usersAttending}
     } catch (err) {
         throw err
     }
@@ -74,6 +75,19 @@ async function getUserRole(potluck_id, user_id) {
     try {
         const userRole =  await db("potluck_members").where({ potluck_id, user_id }).select("role_id").first();
         return userRole
+    } catch (err) {
+        throw err
+    }
+}
+
+//gets users attending a potluck
+async function findUsersAtPotluck(id) {
+    try {
+        return await db('potluck')
+            .join('potluck_members', 'potluck_members.potluck_id', 'potluck.id')
+            .join('users', 'potluck_members.user_id', 'users.id')
+            .where('potluck.id', id)
+            .select('users.username', 'potluck_members.role_id')
     } catch (err) {
         throw err
     }
