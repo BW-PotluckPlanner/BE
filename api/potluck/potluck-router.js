@@ -236,7 +236,7 @@ router.post("/:id/invite/:userId", restrict, async (req, res) => {
 //generates invite code
 function genCode(potluck_id) {
     var newCode = crypto.randomBytes(12).toString('hex')
-    return `${potluck_id}-${newCode}`;
+    return `${potluck_id}${newCode}`;
 }
 
 
