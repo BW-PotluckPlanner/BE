@@ -11,8 +11,6 @@ const {
 } = require('../../middleware/middleware.js');
 
 
-const { Console } = require('console');
-
 const router = express.Router()
 
 
@@ -57,9 +55,10 @@ router.get('/:userId/mypotlucks', restrict, (req, res) => {
 //fetch potlucks user created
 router.get('/:userId/admin', restrict, (req, res) => {
     const { userId } = req.params;
-    Potluck.getAdminRole(userId)
+    const user_id = { userId }
+    const role_id = 1
+    Potluck.findByAdmin(userId)
         .then((potluck) => {
-            
             res.status(200).json(potluck)
         })
         .catch((err) => {
@@ -81,6 +80,20 @@ router.get('/:userId/mypotlucks/:id', restrict, (req, res) => {
             .catch((err) => {
                 res.status(500).json({ message: "could not find potlucks for that user"})
             })
+        }).catch((err) => {
+            res.status(500).json({ message: "no potlucks for that user."})
+        })
+
+})
+
+//fetch single potluck user is apart of
+router.get('/:userId/admin/:id', restrict, (req, res) => {
+    const { userId } = req.params;
+    const { id } = req.params
+
+    Potluck.findSingleByAdmin(userId, id)
+        .then((potluck) => {
+            res.status(200).json(potluck)
         }).catch((err) => {
             res.status(500).json({ message: "no potlucks for that user."})
         })
