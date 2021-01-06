@@ -39,6 +39,17 @@ router.get('/:id', validatePotluckId, restrict, (req, res) => {
         })
 })
 
+router.get('/:id/attendees', restrict, validatePotluckId, restrict, (req, res) => {
+    const { id } = req.params;
+    Potluck.findUsersAtPotluck(id)
+        .then((members) => {
+            res.status(200).json(members)
+        })
+        .catch((err) => {
+            res.status(500).json({ message: `Could not retrieve members attending potluck with the id of ${id}: ${err}`})
+        })
+})
+
 //fetch potlucks user is apart of
 router.get('/:userId/mypotlucks', restrict, (req, res) => {
     const { userId } = req.params;
@@ -124,11 +135,10 @@ router.post('/', restrict, (req, res) => {
 
 //add user to potluck
 
-router.post("/:id/users", (req, res) => {
+router.post("/:id/attendees", (req, res) => {
     const { id } = req.params;
     const potluckData = { potluck_id: id }
     const uid = req.body.userId
-
     if(potluckData.potluck_id && uid) {
         Potluck.addUsertoPotluck({
             potluck_id: id,

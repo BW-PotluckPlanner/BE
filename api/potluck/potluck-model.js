@@ -6,6 +6,7 @@ module.exports = {
     findByUserId,
     findByAdmin,
     findSingleByAdmin,
+    findUsersAtPotluck,
     getUserRole,
     addPotluck,
     addUsertoPotluck,
