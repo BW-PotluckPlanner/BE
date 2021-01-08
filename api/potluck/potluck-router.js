@@ -221,10 +221,30 @@ router.put('/:id/RSVP', validatePotluckId, (req, res) => {
 //delete potluck
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
-
-    Potluck.remove(id)
+    const foodId = req.body.foodId
+    const uid = req.body.userId
+    Potluck.removeFood(id)
         .then((deleted) => {
             res.status(200).json({message: `deleted potluck with the id of ${id}`})
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+})
+
+//delete food from user
+router.delete('/:id/bringfood', (req, res) => {
+    const { id } = req.params;
+    const foodId = req.body.foodId
+    const uid = req.body.userId
+
+    Potluck.remove({
+        potluck_id: id,
+        user_id: uid,
+        food_id: foodId
+    })
+        .then((deleted) => {
+            res.status(200).json({message: `user ${uid} no longer bringin ${foodId}`})
         })
         .catch(err => {
             res.status(500).json(err)

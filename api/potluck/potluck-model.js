@@ -16,7 +16,8 @@ module.exports = {
     addFoodToUser,
     updateRSVP,
     update,
-    remove
+    remove,
+    removeFood
 }
 
 async function find() {
@@ -190,6 +191,17 @@ async function update(id, changes) {
         throw err
     }
 }
+
+//delete food from user
+async function removeFood(food_id, user_id, potluck_id) {
+    try {
+        return await db('user_food').where( food_id, user_id, {potluck_id }).del()
+    } catch (err) {
+        throw err
+    }
+
+}
+
 
 //delete potluck
 async function remove(id) {
