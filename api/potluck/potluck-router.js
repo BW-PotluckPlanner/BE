@@ -136,6 +136,7 @@ router.post('/', restrict, (req, res) => {
                 potluck_id: potluck[0],
                 user_id: uid,
                 role_id: 1,
+                rsvp_id: 1
             }).then(() => {
                 res.status(201).json({id: potluck[0], name: potluckData.name});
             })

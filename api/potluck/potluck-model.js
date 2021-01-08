@@ -9,7 +9,7 @@ module.exports = {
     findUsersAtPotluck,
     getUserRole,
     getFood,
-    getFoodToUsers,
+    getFoodToUser,
     getAdminRole,
     addPotluck,
     addUsertoPotluck,
@@ -33,7 +33,9 @@ async function findById(id) {
       const potluckId = await db('potluck').where({ id }).select('*').first();
       const invited = await findUsersAtPotluck(id)
       const food = await getFood(id)
-      return {...potluckId, invited, food}
+    //   const usersBringingFood = await getFoodToUser(id)
+    //   return {...potluckId, invited, food}
+    return {...potluckId, invited, food}
     } catch (err) {
         throw err
     }
@@ -116,24 +118,33 @@ async function findUsersAtPotluck(id) {
 //gets food wanted from potluck
 async function getFood(id) {
     try {
-        return await db('potluck')
+        const getsFood = await db('potluck')
             .join('potluck_food', 'potluck_food.potluck_id', 'potluck.id')
             .join('food', 'potluck_food.food_id', 'food.id')
             .where('potluck.id', id)
             .select('food.name')
+        
+        return getsFood
     } catch (err) {
         throw err
     }
 }
 
 //gets food user is bringing
-async function getFoodToUsers(id) {
+async function getFoodToUser(id) {
     try {
-        return await db('food')
-            .join('member_food', 'member_food.food.id', 'food.id')
-            .join('food', 'member_food.id', 'food.id')
-            .join('potluck_member', 'potluck_member.user_id', 'users.id')
-            .where('food.id', id)
+
+        const wantedFood = getFood(id)
+    
+        const usersBringing = await db('potluck')
+            .join('user_food', 'user_food.potluck_id', 'potluck.id')
+            .join('food', 'user_food.food_id', 'food.id')
+            .join('user_food', 'user_food.user_id', 'users.id')
+            .join('users', 'user_food.user_id', 'users.id')
+            .where('potluck.id', id)
+            .select('users.name')
+
+        return wantedFood
     } catch (err) {
         throw err;
     }
