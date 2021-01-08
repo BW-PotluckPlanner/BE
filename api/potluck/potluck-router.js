@@ -7,7 +7,8 @@ const Invite = require('../invites/invite-model.js')
 const {
     restrict,
     validatePotluckId,
-    validatePotluckOwner
+    validatePotluckOwner,
+    validateUserId
 } = require('../../middleware/middleware.js');
 
 
@@ -31,8 +32,8 @@ router.get('/:id', validatePotluckId, restrict, (req, res) => {
     const potluck = req.potluck;
 
     Potluck.findById(id)
-        .then((potluck) => {
-            res.status(200).json(potluck)
+        .then((pluck) => {
+            res.status(200).json(pluck)
         })
         .catch((err) => {
             res.status(500).json({ message: `Could not retrieve potluck with the id of ${id}: ${err}`})
@@ -145,8 +146,28 @@ router.post('/', restrict, (req, res) => {
         })
 })
 
-//add user to potluck
+//add food to user
+router.post("/:id/bringfood", (req, res) => {
+    const { id } = req.params;
+    const foodId = req.body.foodId
+    const uid = req.body.userId
+    console.log(uid, foodId, id)
+    if(foodId && uid) {
+        Potluck.addFoodToUser({
+            potluck_id: id,
+            user_id: uid,
+            food_id: foodId
+        }).then(() => {
+            res.status(201).json({ message: `user: ${uid}, is now bringing food id: ${foodId}`})
+        }).catch(err => {
+            res.status(500).json({ message: `Failed to add user to potluck: ${err}`})
+        })
+    } else {
+        res.status(400).json({ message: "must contain required fields" });
+      }
+})
 
+//add user to potluck
 router.post("/:id/attendees", (req, res) => {
     const { id } = req.params;
     const potluckData = { potluck_id: id }
@@ -159,7 +180,7 @@ router.post("/:id/attendees", (req, res) => {
         }).then(() => {
             res.status(201).json({ message: `user: ${uid}, added to potluck: ${id}`})
         }).catch(err => {
-            res.status(500).json({ message: `Failed to add user to potluck: ${err}`})
+            res.status(500).json({ message: `Failed to food to user at potluck: ${err}`})
         })
     } else {
         res.status(400).json({ message: "must contain required fields" });
@@ -177,6 +198,23 @@ router.put('/:id', validatePotluckId, (req, res) => {
         })
         .catch(err => {
             res.status(500).json({ message: `Can't update potluck with the id ${id} because ${err}`})
+        })
+})
+
+
+
+//update user is attending
+router.put('/:id/RSVP', validatePotluckId, (req, res) => {
+    const rsvp_id = req.body.rsvpId
+    const user_id = req.body.userId
+    const potluck_id = req.params.id
+    console.log(rsvp_id, user_id , potluck_id)
+    Potluck.updateRSVP(rsvp_id, user_id , potluck_id)
+        .then((changes) => {
+            res.status(200).json({ message: `user ${user_id}'s status has changed.`, changes})
+        })
+        .catch(err => {
+            res.status(500).json({ message: `user could not rsvp: ${err}` })
         })
 })
 

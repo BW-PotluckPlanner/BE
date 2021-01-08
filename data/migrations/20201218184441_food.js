@@ -4,7 +4,7 @@ exports.up = function (knex) {
 
         food.string('name', 50)
         .notNullable()
-        .unique(); 
+         
     })
     .createTable('potluck_food', plf => {
 
@@ -26,6 +26,35 @@ exports.up = function (knex) {
 
         plf.primary(["food_id", "potluck_id"]);
       })
+    
+      .createTable('user_food', uf => {
+
+        uf.integer('food_id')
+        .unsigned()
+        .notNullable()
+        .references("id")
+        .inTable("food")
+        .onUpdate("CASCADE")
+        .onDelete("RESTRICT");
+    
+        uf.integer('user_id')
+        .unsigned()
+        .notNullable()
+        .references("id")
+        .inTable("user")
+        .onUpdate("CASCADE")
+        .onDelete("RESTRICT");
+
+        uf.integer('potluck_id')
+        .unsigned()
+        .notNullable()
+        .references("id")
+        .inTable("potluck")
+        .onUpdate("CASCADE")
+        .onDelete("RESTRICT");
+
+        uf.primary(["food_id", "potluck_id"]);
+      })
   
   };
   
@@ -33,5 +62,5 @@ exports.up = function (knex) {
     return knex.schema
         .dropTableIfExists('food')
         .dropTableIfExists('potluck_food')
-        
+        .dropTableIfExists('user_food')
   };

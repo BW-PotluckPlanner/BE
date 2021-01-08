@@ -52,6 +52,23 @@ exports.up = function(knex) {
         .inTable("roles")
         .onUpdate("CASCADE")
         .onDelete("RESTRICT");
+
+        pm
+        .integer("rsvp_id")
+        .unsigned()
+        .references("id")
+        .inTable("rsvp")
+        .onUpdate("CASCADE")
+        .onDelete("RESTRICT");
+
+        pm
+        .integer("food_id")
+        .unsigned()
+        .references("id")
+        .inTable("food")
+        .onUpdate("CASCADE")
+        .onDelete("RESTRICT");
+        
     
       // Composite key with user_id and team_id
         pm.primary(["user_id", "potluck_id"]);

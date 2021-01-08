@@ -62,32 +62,32 @@ router.post('/register', checkForUser, async (req, res) => {
 });
 
 
- router.post('/login', checkForUser, async (req,res) => {
-    let { username, password } = req.body
+router.post('/login', checkForUser, async (req,res) => {
+  let { username, password } = req.body
 
-    try {
-      if (req.userExists) {
-        console.log("USER EXISTS:", req.userExists)
-        const user = await Users.findBy(username)
-        console.log("This is Log IN user: ", user)
+  try {
+    if (req.userExists) {
+      console.log("USER EXISTS:", req.userExists)
+      const user = await Users.findBy(username)
+      console.log("This is Log IN user: ", user)
 
-        if (username && password) {
-          if (bcryptjs.compareSync(password, req.user.password)) {
-            const token = jwt.sign({ username: user.username}, process.env.JWT_SECRET, { expiresIn: '1d'})
-            res.status(200).json({ message: `welcome, ${req.user.username}`, token, userId: req.user.id })
-          } else {
-            res.status(401).json({ message: "invalid credentials" })
-          }
+      if (username && password) {
+        if (bcryptjs.compareSync(password, req.user.password)) {
+          const token = jwt.sign({ username: user.username}, process.env.JWT_SECRET, { expiresIn: '1d'})
+          res.status(200).json({ message: `welcome, ${req.user.username}`, token, userId: req.user.id })
         } else {
-          res.status(400).json({ message: "username and password required"})
-        }  
-      }  else {
-        res.status(400).json({message: "failed to log in: user does not exist"})
-      }
-    } catch (err) {
-      console.log(err)
-      res.status(500).json({ message: 'invalid credentials'})
+          res.status(401).json({ message: "invalid credentials" })
+        }
+      } else {
+        res.status(400).json({ message: "username and password required"})
+      }  
+    }  else {
+      res.status(400).json({message: "failed to log in: user does not exist"})
     }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ message: 'invalid credentials'})
+  }
 })
 
 

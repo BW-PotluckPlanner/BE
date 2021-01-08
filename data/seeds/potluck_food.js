@@ -1,6 +1,6 @@
 exports.seed = function(knex) {
     // Deletes ALL existing entries
-    return knex('potluck_food').del()
+    return knex('potluck_food').truncate()
       .then(function () {
         // Inserts seed entries
         return knex('potluck_food').insert([
