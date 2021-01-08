@@ -55,7 +55,9 @@ async function update(id, changes) {
 
 async function remove(id) {
     try {
-        return await db('food').where({ id }).del()
+        const deleteFood = await db('food').where({ id }).del()
+        const deletePFood = await db('potluck_food').where({ food_id: id }).del()
+        return deleteFood, deletePFood
     } catch (err) {
         throw err
     }

@@ -225,7 +225,7 @@ router.delete('/:id', (req, res) => {
     const { id } = req.params;
     const foodId = req.body.foodId
     const uid = req.body.userId
-    Potluck.removeFood(id)
+    Potluck.remove(id)
         .then((deleted) => {
             res.status(200).json({message: `deleted potluck with the id of ${id}`})
         })
