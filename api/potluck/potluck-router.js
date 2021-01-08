@@ -177,7 +177,8 @@ router.post("/:id/attendees", (req, res) => {
         Potluck.addUsertoPotluck({
             potluck_id: id,
             user_id: uid,
-            role_id: 2
+            role_id: 2,
+            rsvp_id: 2
         }).then(() => {
             res.status(201).json({ message: `user: ${uid}, added to potluck: ${id}`})
         }).catch(err => {
