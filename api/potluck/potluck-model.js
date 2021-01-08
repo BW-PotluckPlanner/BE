@@ -33,9 +33,8 @@ async function findById(id) {
       const potluckId = await db('potluck').where({ id }).select('*').first();
       const invited = await findUsersAtPotluck(id)
       const food = await getFood(id)
-    //   const usersBringingFood = await getFoodToUser(id)
-    //   return {...potluckId, invited, food}
-    return {...potluckId, invited, food}
+      const usersBringing = await getFoodToUser(id)
+    return {...potluckId, invited, food, usersBringing}
     } catch (err) {
         throw err
     }
@@ -134,17 +133,18 @@ async function getFood(id) {
 async function getFoodToUser(id) {
     try {
 
-        const wantedFood = getFood(id)
-    
-        const usersBringing = await db('potluck')
-            .join('user_food', 'user_food.potluck_id', 'potluck.id')
-            .join('food', 'user_food.food_id', 'food.id')
-            .join('user_food', 'user_food.user_id', 'users.id')
-            .join('users', 'user_food.user_id', 'users.id')
-            .where('potluck.id', id)
-            .select('users.name')
+ 
 
-        return wantedFood
+    
+        const userBringing = await db('potluck')
+            .join('user_food', 'user_food.potluck_id', 'potluck.id')
+            .join('users', 'user_food.user_id', 'users.id')
+            .join('food', 'user_food.food_id', 'food.id')
+            .where('potluck.id', id)
+            .select('users.username', {bringing: 'food.name'})
+
+        return userBringing
+
     } catch (err) {
         throw err;
     }

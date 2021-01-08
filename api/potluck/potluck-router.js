@@ -14,6 +14,24 @@ const {
 
 const router = express.Router()
 
+//fetch food user is bringing to potluck
+router.get('/:id/bringfood', restrict, validatePotluckId, (req, res) => {
+
+    const id = req.params.id
+    console.log(req.params)
+    Potluck.getFoodToUser(id)
+        .then(getmeinfo => {
+            res.status(200).json(getmeinfo)
+        })
+        .catch(err => {
+            res.status(500).json({ err })
+        })
+
+})
+
+
+
+
 
 //fetch all potlucks
 router.get('/', restrict, (req, res) => {
