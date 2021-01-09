@@ -121,7 +121,7 @@ async function getFood(id) {
             .join('potluck_food', 'potluck_food.potluck_id', 'potluck.id')
             .join('food', 'potluck_food.food_id', 'food.id')
             .where('potluck.id', id)
-            .select('food.name')
+            .select('food.name', 'food.id')
         
         return getsFood
     } catch (err) {

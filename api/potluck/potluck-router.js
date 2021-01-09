@@ -258,7 +258,7 @@ router.delete('/:id/bringfood', (req, res) => {
     const foodId = req.body.foodId
     const uid = req.body.userId
 
-    Potluck.remove({
+    Potluck.removeFood({
         potluck_id: id,
         user_id: uid,
         food_id: foodId
